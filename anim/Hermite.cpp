@@ -1,4 +1,4 @@
-#include "Hermite.h"
+#include "HermiteSystem.h"
 #include <util/vectorObj.h>
 
 // static variables
@@ -20,7 +20,7 @@ Hermite::~Hermite(void)
 {
 }	// Hermite::~Hermite
 
-void Hermite::_getIntermediatePoint(VectorObj& p, double t)
+void Hermite::_getIntermediatePoint(VectorObj& p, double t) 
 {
 	int base_index;
 	double base_t;

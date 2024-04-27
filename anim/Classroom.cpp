@@ -15,10 +15,10 @@ void Classroom::display(GLenum mode)
     // Blackboard
     glBegin(GL_QUADS);
     set_colour(0, 0, 0);
-    glVertex3d(9, 6, -0.05);
-    glVertex3d(9, -6, -0.05);
-    glVertex3d(-9, -6, -0.05);
-    glVertex3d(-9, 6, -0.05);
+    glVertex3d(9, 6, -0.01);
+    glVertex3d(9, -6, -0.01);
+    glVertex3d(-9, -6, -0.01);
+    glVertex3d(-9, 6, -0.01);
     glEnd();
 
     // Classroom Wall

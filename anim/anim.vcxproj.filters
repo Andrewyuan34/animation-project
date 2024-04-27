@@ -47,10 +47,10 @@
     <ClCompile Include="IKSim.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Hermite.cpp">
+    <ClCompile Include="Bob.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Bob.cpp">
+    <ClCompile Include="HermiteSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -91,10 +91,10 @@
     <ClInclude Include="IKSim.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Hermite.h">
+    <ClInclude Include="Bob.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Bob.h">
+    <ClInclude Include="HermiteSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

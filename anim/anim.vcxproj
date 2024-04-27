@@ -51,7 +51,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>C:\Users\andrew\Desktop\Library\eigen;$(SolutionDir)/eigen-3.4.0;GL;../;../tcl83;../..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\andrew\Desktop\Assignment 3\glm;C:\Users\andrew\Desktop\Library\eigen;$(SolutionDir)/eigen-3.4.0;GL;../;../tcl83;../..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -60,6 +60,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalDependencies>tcl.lib;tk.lib;util.lib;GLModel.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -101,7 +102,7 @@
     <ClCompile Include="Bob.cpp" />
     <ClCompile Include="Classroom.cpp" />
     <ClCompile Include="GlobalResourceManager.cpp" />
-    <ClCompile Include="Hermite.cpp" />
+    <ClCompile Include="HermiteSystem.cpp" />
     <ClCompile Include="IKSim.cpp" />
     <ClCompile Include="myScene.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
@@ -118,7 +119,7 @@
     <ClInclude Include="Bob.h" />
     <ClInclude Include="Classroom.h" />
     <ClInclude Include="GlobalResourceManager.h" />
-    <ClInclude Include="Hermite.h" />
+    <ClInclude Include="HermiteSystem.h" />
     <ClInclude Include="IKSim.h" />
     <ClInclude Include="myScene.h" />
     <ClInclude Include="ResourceManager.h" />

@@ -1,8 +1,10 @@
-#pragma once
+﻿#pragma once
 
 #include "BaseSystem.h"
 #include <Eigen/Dense>
 #include <cmath>
+#include<Eigen/StdVector>
+#include <iostream>
 
 #define SCALE 2.75
 
@@ -28,22 +30,31 @@ struct Skeleton
 	Vector phand;
 	Vector currentP;
 	Vector targetP;
+	int NUM_JOINTS = 3; // 3 joints in the arm
 
-	boolean updateRestingPosition;
+	struct Joint {
+		Eigen::Vector3d position;    // 关节的位置
+		Eigen::Quaterniond orientation; // 关节的旋转方向，使用四元数表示
+
+		// 构造函数，初始化orientation为单位四元数
+		Joint() : orientation(Eigen::Quaterniond::Identity()) {}
+	};
+	std::vector<Joint, Eigen::aligned_allocator<Joint>> joints; //绷不住了，这tm是什么东西
+
 
 	Skeleton() {
 		zeroVector(torso_T);
 		setVector(shoulder_T, 0.55 * SCALE, 1.1 * SCALE, 0);
 		zeroVector(shoulder_R);
-		setVector(elbow_T, 2 * SCALE, 0, 0);
+		setVector(elbow_T, 1.3 * SCALE, 0, 0); //这个是距离前一个关节的距离
 		zeroVector(elbow_R);
-		setVector(wrist_T, 2 * SCALE, 0, 0);
+		setVector(wrist_T, 1.2 * SCALE, 0, 0);
 		zeroVector(wrist_R);
 
 		zeroVector(currentP);
 		zeroVector(targetP);
 
-		setVector(phand, 1.8, 0, 0); // 1 added in matrix calculation
+		setVector(phand, 4, 0, 0); // 1 added in matrix calculation
 
 		zeroVector(shoulder_L);
 		zeroVector(elbow_L);
@@ -51,17 +62,25 @@ struct Skeleton
 		// starting distance from blackboard for Bob
 		torso_T[0] = -2;
 		torso_T[1] = -3;
-		torso_T[2] = 7.5; 
+		torso_T[2] = 7.5;
+
+		joints.resize(NUM_JOINTS);
 	}
 };
 
+
 class Bob : public BaseSystem
 {
-protected:
-	Skeleton* skel = new Skeleton();
 
 public:
 	Bob(const std::string& name);
+
+	Skeleton* skel;
+	bool flag = false;
+
+	~Bob() {
+		delete skel;
+	}
 
 	void getState(double* p);
 	void setState(double* p);
@@ -73,7 +92,7 @@ public:
 
 	void drawEllipse(double x, double y, Color color);
 	void glRotate3D(double x, double y, double z);
-	
+
 	Eigen::Matrix4d getTranslation(Vector position);
 	Eigen::Matrix4d getRotationX(double theta);
 	Eigen::Matrix4d getRotationY(double theta);
@@ -82,6 +101,8 @@ public:
 	Eigen::Matrix4d getRotationYDerivative(double theta);
 	Eigen::Matrix4d getRotationZDerivative(double theta);
 
-	void calculateCurrentP();
-	void IKSolver();
+	void setInitAngle();
+	void calculateCurrentP(const bool a = false);
+	void Pseudo_Inverse_IK();
+	void CCD_IK();
 };

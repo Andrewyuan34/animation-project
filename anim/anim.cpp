@@ -23,6 +23,7 @@
 #include "anim.h"
 #include "animTcl.h"
 #include "myScene.h"
+#include "util/Picker.h"
 
 FrameSaver g_frameSaver ;
 Timer g_globalTimer ;
@@ -99,12 +100,33 @@ void Reset(void)
 
 }
 
+
+/*
+void screenToWorld(int x, int y, double& worldX, double& worldY) {
+	GLint viewport[4];
+	GLdouble modelview[16];
+	GLdouble projection[16];
+	GLfloat winX, winY, winZ;
+	GLdouble worldZ;
+
+	glGetIntegerv(GL_VIEWPORT, viewport);
+	glGetDoublev(GL_MODELVIEW_MATRIX, modelview);
+	glGetDoublev(GL_PROJECTION_MATRIX, projection);
+
+	winX = (float)x;
+	winY = (float)viewport[3] - (float)y;
+	winZ = 0.0;
+
+	gluUnProject(winX, winY, winZ, modelview, projection, viewport, &worldX, &worldY, &worldZ);
+}
+
+*/
+
 // start or end interaction
 void MouseCB(int button, int state, int x, int y)
 {
 
 	GlobalResourceManager::use()->setMouseButtonInfo( button, state );
-
 
 	if( button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN )
 	{
@@ -132,7 +154,10 @@ void MouseCB(int button, int state, int x, int y)
 		g_prevY = y ;
 	}
 
-	myMouse(button, state, x,y) ;
+
+	Vector result;
+	pickFromXYPlane(result, x, y);
+	myMouse(button, state, result[0], result[1]);
 
 	// Tell the system to redraw the window
 	glutPostRedisplay() ;
@@ -528,7 +553,7 @@ static void		setargv	_ANSI_ARGS_((int *argcPtr, char	***argvPtr));
 
 int APIENTRY
 WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
-		LPSTR lpszCmdLine, int nCmdShow)
+		LPSTR lpszCmdLine, int nCmdShow) 
 {
 	char **argv, *p;
 	int	argc;

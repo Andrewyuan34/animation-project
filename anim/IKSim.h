@@ -2,7 +2,8 @@
 
 #include "BaseSimulator.h"
 #include "BaseSystem.h"
-#include "Hermite.h"
+//#include "Hermite.h"
+#include "HermiteSystem.h"
 #include "Bob.h"
 #include <Eigen/Dense>
 
@@ -16,9 +17,9 @@ protected:
 	double prev_t;
 
 	BaseSystem* m_object;
-	Skeleton ikSkeleton;
+	double param[2]; // pass parameters to the system
 
-	Hermite* hermite;
+	HermiteSystem* hermite;
 	double hermite_t;
 
 	Vector pTargetP;
@@ -39,6 +40,6 @@ public:
 
 	int command(int argc, myCONST_SPEC char** argv);
 
-	void setHermite(Hermite* target);
+	void setHermite(HermiteSystem* target);
 
 };

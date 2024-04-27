@@ -1,4 +1,4 @@
-#include "IKSim.h"
+﻿#include "IKSim.h"
 
 IKSim::IKSim(const std::string& name, BaseSystem* target) :
 	BaseSimulator(name),
@@ -8,12 +8,11 @@ IKSim::IKSim(const std::string& name, BaseSystem* target) :
 	hermite_t = 0;
 	delta_t = 0;
 	prev_t = 0;
-	ikSkeleton = {};
 	initial = 0.01;
 	increment = 0.01;
 }
 
-void IKSim::setHermite(Hermite* target)
+void IKSim::setHermite(HermiteSystem* target)
 {
 	hermite = target;
 }
@@ -21,7 +20,6 @@ void IKSim::setHermite(Hermite* target)
 int IKSim::init(double time)
 {
 	return 0;
-
 }
 
 int IKSim::step(double time)
@@ -45,11 +43,11 @@ int IKSim::step(double time)
 		m_object->getState(currentP);
 
 		// get target position based on hermite t value
-		VectorObj target = hermite->getIntermediatePoint(hermite_t);
-		setVector(targetP, target[0], target[1], target[2]);
+		LineSegment target = hermite->getLookUpTable(hermite_t);
+		//setVector(targetP, target[0], target[1], target[2]);
 
 		// calculate error and set new target position if bob is close
-		VecSubtract(error, targetP, currentP);
+		VecSubtract(error, target.start, currentP);
 
 		if (VecLength(error) < 0.15)
 		{
@@ -71,11 +69,11 @@ int IKSim::step(double time)
 			Vector pTarget;
 			VecAdd(pTarget, pTargetP, velocity_med);
 			m_object->setState(pTarget);
-			if (initial < 1) 
+			if (initial < 1)
 				initial += increment;
 		}
 		else {
-			m_object->setState(targetP);
+			m_object->setState(target.start);
 
 		}
 	}
@@ -96,8 +94,9 @@ int IKSim::command(int argc, myCONST_SPEC char** argv)
 	{
 		if (argc == 2)
 		{
-			hermite->loadFromFile2D(argv[1]);
-			animTcl::OutputMessage("[iksim] Read spline from file");
+			hermite->loadFile(argv[1]); //这块还没有输入文件，这两个程序输入文件的格式是一样的，所以这块不需要转换
+			hermite->generateLookUpTable();//这里生成完之后就是step里面的代码了，再之后就是myscene里面的代码了
+			animTcl::OutputMessage("[PseudoInverseIK] Read spline from file");
 			fileLoaded = true;
 
 			// Reset LERP variables
@@ -106,15 +105,28 @@ int IKSim::command(int argc, myCONST_SPEC char** argv)
 			initial = 0.1;
 			increment = 0.01;
 
-			// Send natural hand resting position to Bob
-			ikSkeleton.updateRestingPosition = true;
-			setVector(ikSkeleton.shoulder_R, -107.57, -325.06, -317.46);
-			setVector(ikSkeleton.elbow_R, 101.07, -267.92, 0);
-			setVector(ikSkeleton.wrist_R, 0, 72.87, 85.12);
-			setVector(ikSkeleton.shoulder_L, 90, 70, 0);
-			setVector(ikSkeleton.elbow_L, 0, 20, 0);
-			m_object->setState((double*)&ikSkeleton);
-			ikSkeleton.updateRestingPosition = false;
+			param[0] = 1; // at 0 position, 1 for pseudo, 2 for CCD
+			param[1] = 1; // at 1 position, 1 for pseudo, 2 for CCD
+			m_object->setState(param);
+			param[0] = 0; // 0 for not updating resting position
+		}
+		else if (argc == 3 && strcmp(argv[2], "CCDIK") == 0) { // simulator iksim read animation2.txt CCDIK
+			hermite->loadFile(argv[1]);
+			hermite->generateLookUpTable();
+			animTcl::OutputMessage("[CCDIK] Read spline from file");
+			fileLoaded = true;
+
+			// Reset LERP variables
+			hermite_t = 0;
+			transition = true;
+			initial = 0.1;
+			increment = 0.03;
+
+			param[1] = 2; // at 1 position, 1 for pseudo, 2 for CCD
+			param[0] = 2; // 2 for updating resting position and it is CCD
+			// Calcalue the pos of each joint
+			m_object->setState(param);
+			param[0] = 0; // 0 for not updating resting position
 		}
 		else
 		{
