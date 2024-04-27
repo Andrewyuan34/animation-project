@@ -6,10 +6,10 @@ The program should work as follows. Through the scripting, the commands read an 
 
 ## Tasks
 
-1.Modeled a classroom using one wall whose visible surface is the z = 0 plane, where the blackboard is attached, and a planar floor with the y-axis as its normal.
-1.The character is initially in the rest pose. After a spline is loaded, the character switches to the Ready pose for drawing on the blackboard.
-1.Implemented functionality to read arbitrary splines and project them onto the blackboard.
-1.Modeled a human character using ellipses.
-1.Implemented CCDIK and PseudoInverse methods to optimize arm motion paths for smooth animations.
-1.Developed interpolation system, including Hermite and Catmull-Rom splines, for controlled motion curves.
-1.Employed Point Picking with automatic interpolation technology to accurately add control points from any viewing angle.
+1.  Modeled a classroom using one wall whose visible surface is the z = 0 plane, where the blackboard is attached, and a planar floor with the y-axis as its normal.
+1.  The character is initially in the rest pose. After a spline is loaded, the character switches to the Ready pose for drawing on the blackboard.
+1.  Implemented functionality to read arbitrary splines and project them onto the blackboard.
+1.  Modeled a human character using ellipses.
+1.  Implemented CCDIK and PseudoInverse methods to optimize arm motion paths for smooth animations.
+1.  Developed interpolation system, including Hermite and Catmull-Rom splines, for controlled motion curves.
+1.  Employed Point Picking with automatic interpolation technology to accurately add control points from any viewing angle.
